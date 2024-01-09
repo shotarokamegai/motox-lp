@@ -591,17 +591,18 @@ html.lenis {
 body {
   font-feature-settings: "palt";
   font-family: "ryo-gothic-plusn", sans-serif;
-  color: #254850;
+  color: #262626;
+  background-color: #f9f9f6;
   overscroll-behavior: none;
   transition: opacity 0.5s ease;
 }
 body ::-moz-selection {
-  color: #ffffff;
-  background-color: #254850;
+  color: #fff;
+  background-color: #262626;
 }
 body ::selection {
-  color: #ffffff;
-  background-color: #254850;
+  color: #fff;
+  background-color: #262626;
 }
 body.loaded, body.visited {
   opacity: 1;
@@ -609,63 +610,186 @@ body.loaded, body.visited {
 body .hidden {
   visibility: hidden;
 }
+body .anim.normal {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  will-change: transform, opacity;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, transform 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+body .anim.normal.active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
 
 .bold {
   font-weight: bold;
 }
 
 @media screen and (min-width: 750px) {
-  .show {
-    opacity: 0;
-    transform: translate3d(0, 10rem, 0) scale(0.95);
-    will-change: opacity, transform;
-    transition: transform cubic-bezier(0.19, 1, 0.22, 1) 2s, opacity cubic-bezier(0.19, 1, 0.22, 1) 2s;
+  #container {
+    padding-top: 16rem;
   }
-  .show.active {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+  #container #header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 16rem;
+    width: 100%;
+    background-color: #f9f9f6;
+    z-index: 10;
   }
-  #loading {
+  #container #header .section__inner {
+    height: 100%;
+    border-bottom: 0.1rem solid #262626;
+  }
+  #container #header .section__inner h1 img:nth-child(1) {
+    margin-right: 1.5rem;
+    width: 10.604rem;
+  }
+  #container #header .section__inner h1 img:nth-child(2) {
+    width: 24.859rem;
+  }
+  #container #header .section__inner nav ul li {
+    margin-right: 4.8rem;
+    font-size: 14px;
+    font-size: 1.4rem;
+  }
+  #container #header .section__inner nav ul li a {
+    color: #262626;
+  }
+  #container #header .section__inner nav ul li:last-child {
+    margin-right: 0;
+  }
+  #container #footer {
+    height: 21.5rem;
+  }
+  #container #footer .section__inner {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    border-top: 0.1rem solid #262626;
+    height: 100%;
   }
-  #loading .logo-wrap {
-    margin: 0 auto;
-    width: 50rem;
+  #container #footer .section__inner .copy {
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    font-size: 12px;
+    font-size: 1.2rem;
+    line-height: 1.6666666667;
   }
-  #loading .logo {
+  #container #footer .section__inner h1 {
+    width: 24.859rem;
+  }
+  #container #footer .section__inner h1 img:nth-child(1) {
+    margin: 0 auto 1.15rem;
+    width: 9.4rem;
+  }
+  #container #footer .section__inner h1 img:nth-child(2) {
+    width: 100%;
+  }
+  #container .btn {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 6rem;
+    width: 29.5rem;
+    text-align: center;
+    background-color: #fff;
   }
-  #loading .logo.active svg {
-    opacity: 1;
+  #container .btn:hover .btn-text {
+    color: #fff;
+    background-color: #9f2948;
   }
-  #loading .logo.fill .fill-target {
-    opacity: 1;
-  }
-  #loading .logo .fill-target {
+  #container .btn .border {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%) scale(1) rotate(0);
-    opacity: 0;
+    height: 100%;
     width: 100%;
-    transition: opacity 0.5s ease;
   }
-  #loading .logo svg {
-    opacity: 0;
+  #container .btn .border::before, #container .btn .border::after {
+    position: absolute;
+    display: block;
+    content: "";
+    background-color: #707070;
   }
-  #loading .logo path {
-    fill-opacity: 0; /*透過0で塗りの色が見えない状態*/
-    transition: fill-opacity 0.5s; /*0.5秒で色が付くアニメーション*/
-    fill: none; /*塗りの色*/
-    stroke: #000; /*線の色*/
+  #container .btn .border.border-top::before, #container .btn .border.border-top::after {
+    height: 0.1rem;
+    width: 28rem;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
   }
-  #loading .logo.done path {
-    fill: #000; /*塗りの色*/
-    fill-opacity: 1; /*透過1で塗りの色が見える状態*/
-    stroke: none; /*線の色*/
+  #container .btn .border.border-top::before {
+    top: 0;
+  }
+  #container .btn .border.border-top::after {
+    bottom: 0;
+  }
+  #container .btn .border.border-left::before, #container .btn .border.border-left::after {
+    height: 4.4rem;
+    width: 0.1rem;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+  }
+  #container .btn .border.border-left::before {
+    left: 0;
+  }
+  #container .btn .border.border-left::after {
+    right: 0;
+  }
+  #container .btn .btn-text {
+    position: relative;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1.2rem;
+    height: 2rem;
+    line-height: 2rem;
+    color: #262626;
+    font-size: 16px;
+    font-size: 1.6rem;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    font-weight: 600;
+    z-index: 1;
+    transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #container .section__inner {
+    position: relative;
+    margin: 0 auto;
+    max-width: 120rem;
+    width: 83.3333333333%;
+  }
+  #container main {
+    overflow: hidden;
+  }
+  #container main section {
+    position: relative;
+  }
+  #container main section.common .wrapper .content {
+    padding: 6rem 0;
+    border-bottom: 0.1rem solid #707070;
+  }
+  #container main section.common .wrapper .content .left {
+    width: 46.6666666667%;
+  }
+  #container main section.common .wrapper .content .left .title {
+    font-size: 32px;
+    font-size: 3.2rem;
+    line-height: 1.6875;
+  }
+  #container main section.common .wrapper .content .left .text {
+    margin-top: 6rem;
+    font-size: 16px;
+    font-size: 1.6rem;
+    line-height: 1.6875;
+  }
+  #container main section.common .wrapper .content .left .btn {
+    margin-top: 4rem;
+  }
+  #container main section.common .wrapper .content .right {
+    width: 46.6666666667%;
   }
 }

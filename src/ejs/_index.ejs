@@ -1,78 +1,64 @@
-<?php include $_SERVER['DOCUMENT_ROOT'].'/../webapp/src/static.ini.php'; ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="ja">
 
 <head>
-  <%- include('parts/_head', {title: '', description: '', keywords: '', url: ''}) %>
+  <%- include('parts/_head', {title: '', description: '', keywords: '', url: '', ogimage: ''}) %>
 </head>
 
-<body class="static <?= \App\CommonLogic::isYappli() ? 'yappli' : ''; ?>">
-  <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/body-start.phtml'; ?>
-
-  <!-- PC用メニュー ------------------------------------->
-  <div class="pc-menu">
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/header-pc.phtml'; ?>
+<body class="">
+  <div id="container">
+    <%- include('parts/_header') %>
+    <main>
+      <section class="section common">
+        <div class="section__inner">
+          <div class="wrapper">
+            <div class="content flex space-between">
+              <div class="left">
+                <p class="title anim normal">
+                  エイジングケアワイン認定について
+                </p>
+                <p class="text anim normal">
+                  ワインによる糖化ケア作用の程度は銘柄により異なります。
+                  エイジングケアワイン研究所では、ワインの糖化ケア作用を定量化する実験系を確立し、所定の基準をクリアしたワインを「エイジングケアワイン」として認定しています。
+                </p>
+                <a href="/about/" class="btn anim normal">
+                  <span class="border border-top"></span>
+                  <span class="border border-left"></span>
+                  <span class="btn-text">詳しくはこちら</span>
+                </a>
+              </div>
+              <div class="right img">
+                <picture class=" anim normal">
+                  <source srcset="./assets/img/img1.webp" type="image/webp" />
+                  <img src="./assets/img/img1.jpg" alt="" />
+                </picture>
+              </div>
+            </div>
+            <div class="content flex space-between">
+              <div class="left">
+                <p class="title anim normal">
+                  ワインリスト
+                </p>
+                <a href="#" class="btn anim normal" target="_blank" rel="noopener noreferrer">
+                  <span class="border border-top"></span>
+                  <span class="border border-left"></span>
+                  <span class="btn-text">詳しくはこちら</span>
+                </a>
+              </div>
+              <div class="right img">
+                <picture class=" anim normal">
+                  <source srcset="./assets/img/img2.webp" type="image/webp" />
+                  <img src="./assets/img/img2.jpg" alt="" />
+                </picture>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <%- include('parts/_footer') %>
   </div>
-  <!-- /PC用メニュー ------------------------------------->
-
-  <!-- SP用メニュー ------------------------------------->
-  <div class="sp-menu">
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/header-sp.phtml'; ?>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/gnav-sp.phtml'; ?>
-    <div class="overlay"></div>
-    <!-- [/overlay] -->
-  </div>
-  <!-- /SP用メニュー ------------------------------------->
-
-  <div class="wrapper">
-    <div class="pc-menu">
-      <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/gnav-pc.phtml'; ?>
-    </div>
-    <div class="contents">
-      <%- include('pages/_loading') %>
-      <%- include('pages/_home') %>
-      <!-- [/main] -->
-    </div>
-    <!-- [/contents] -->
-
-    <!-- PC用 フッタ ------------------------------------->
-    <div class="pc-menu">
-      <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/footer-pc.phtml'; ?>
-    </div>
-    <!-- /PC用 フッタ ------------------------------------->
-
-    <!-- SP用 フッタ ------------------------------------->
-    <div class="sp-menu">
-      <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/footer-sp.phtml'; ?>
-    </div>
-    <!-- /SP用 フッタ ------------------------------------->
-  </div>
-  <!-- [/wrapper] -->
-
-  <!-- SP用 メニュー ------------------------------------->
-  <div class="sp-menu">
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/search-modal.phtml'; ?>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/sp-menu.phtml'; ?>
-  </div>
-  <!-- /SP用 メニュー ------------------------------------->
-
-  <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/webapp_settings.phtml'; ?>
-
-  <!-- scripts -->
-  <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/body-end-first.phtml'; ?>
-  <script src="/common/static/js/lib/lib.js"></script>
-  <script src="/common/static/js/common.js"></script>
-  <script src="/common/static/js/gnavi-responsive.js"></script>
-  <script src="/common/static/js/select-modal-formenu.js"></script>
-  <?php include $_SERVER['DOCUMENT_ROOT'].'/templates/parts/body-end-last.phtml'; ?>
-  <!-- 静的ページ用 script ------------------------------------ -->
-  <script src="/common/static/js/jos_common.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
-  <!-- unpkg -->
-  <script src="//unpkg.com/@barba/core" defer></script>
-  <script src="./assets/js/libs.js" defer></script>
-  <script src="./assets/js/main.js" defer></script>
-  <!-- 静的ページ用 script ------------------------------------ -->
 </body>
-
+<script src="./assets/js/libs.js"></script>
+<script src="./assets/js/main.js"></script>
 </html>

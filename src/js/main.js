@@ -1,777 +1,187 @@
-import * as THREE from 'three';
-// import frag from "./../../assets/shader/main.frag?raw";
-// import vert from "./../../assets/shader/main.vert?raw";
+import _ from './utils/Util';
+import Event from './events/Event';
+import Scroll from './../js/utils/Scroll';
 
-class main {
-  constructor(webgl) {
-    this.webgl = webgl;
-    this.width = window.innerWidth;
-    this.height = window.innerWidth;
-    this.header = document.getElementById('header');
-    this.container = document.getElementById('container');
-    this.logo = document.getElementById('logo');
-    this.cta = document.getElementById('cta');
-    this.theme = document.getElementById('theme');
-    this.ellipse = document.getElementById('ellipse');
-    this.cur = document.getElementById('cur');
-    this.top = document.getElementById('top');
-    this.menu = document.getElementById('menu');
-    this.footer = document.getElementById('footer');
-    this.headerEllipse = document.getElementById('header-ellipse');
-    this.speaker = document.getElementsByClassName('trigger-speaker');
-    this.speakerOverlay = document.getElementById('speaker');
-    this.speakerNameJa = document.getElementById('speaker-name-ja');
-    this.speakerNameEn = document.getElementById('speaker-name-en');
-    this.speakerText = document.getElementById('speaker-text');
-    this.speakerDesc = document.getElementById('speaker-desc');
-    this.speakerLink = document.getElementById('speaker-link');
-    this.speakerCredit = document.getElementById('speaker-credit');
-    this.speakerFace = document.getElementsByClassName('speaker-face')[0];
-    this.keyvImg = document.getElementsByClassName('keyv-img');
-    this.fixed = document.getElementsByClassName('fixed');
-    this.scrollTrigger = document.getElementsByClassName('scroll-trigger');
-    this.menuTrigger = document.getElementsByClassName('menu-trigger');
-    this.ctaAbsolute = document.getElementById('ctaabsolute');
-    this.scroller = document.body;
-    this.sp = false;
-    this.dir = 'enter';
-    this.moving = false;
-    this.initiated = false;
-    this.index = 0;
-    this.next = 1;
-    this.lerpAmount = 0;
-    // this.test = false;
-    // let staticPath = 'sustainability-summit/'
+class Main {
+  constructor() {
+    window.onload = () => {
+      this.pageSize = _.getPageSize();
+      this.header = document.getElementById('header');
+      this.headerFixed = document.getElementById('header-fixed');
+      this.root = document.getElementById('container');
+      this.menu = document.getElementById('menu');
+      this.logo = document.getElementById('logo');
+      this.top = document.getElementById('top');
+      this.subMenu = document.getElementById('sub-menu');
 
-    // Splitting();
-    // this.checkBreakPoint();
-    // this.animationScroll();
+      this.anim = document.getElementsByClassName('anim');
+      this.swiperContainer = document.getElementsByClassName('swiper-container');
+      this.menuTrigger = document.getElementsByClassName('menu-trigger');
+      this.scrollTrigger = document.getElementsByClassName('scroll-trigger');
+      this.animRatio = .8;
+      this.index = 1;
+      this.swipers = [];
 
-    gsap.registerPlugin(ScrollTrigger);
+      this.parallaxArray = [];
+      this.scrollingElement =
+        'scrollingElement' in document
+          ? document.scrollingElement
+          : window.navigator.userAgent.indexOf('WebKit') != -1
+            ? body
+            : document.documentElement || body.parentNode;
+      this.scrollY = this.scrollingElement.scrollTop;
+      this.startPos = 0;
 
-    // if (this.test) {
-    //   staticPath = 'sustainability-summit/test/'
-    // }
-    // let path = '';
+      Event.add(this.listen.bind(this));
+      this.isIE();
+      this.ready();
 
-    // let disp = `/c/${staticPath}assets/img/top/disp.jpg`;
-    // let white = `/c/${staticPath}assets/img/top/white.jpg`;
-    // let img1 = `/c/${staticPath}assets/img/top/${path}kv1.jpg`;
-    // let img2 = `/c/${staticPath}assets/img/top/${path}kv2.jpg`;
-    // let img3 = `/c/${staticPath}assets/img/top/${path}kv3.jpg`;
-    // let img4 = `/c/${staticPath}assets/img/top/${path}kv4.jpg`;
-    // let img5 = `/c/${staticPath}assets/img/top/${path}kv5.jpg`;
+      window.onscroll = () => {
+        this.scrollAnimation();
+        if (this.scrollY <= this.startPos) {
+          // this.headerFixed.classList.remove('show');
+        } else if (this.startPos !== 0) {
+          // this.headerFixed.classList.add('show');
+        }
+        this.startPos = this.scrollY;
+      }
 
-    // if (this.sp) {
-    //   this.cta.classList.add('active');
-    //   this.scroller = this.container;
-    // }
+      window.onresize = () => {
+        this.resizeEvent();
+      }
 
-    // this.scene = new THREE.Scene();
-    // this.renderer = new THREE.WebGLRenderer({
-    //   antialias: false,
-    // });
-
-    // this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    // this.renderer.setSize(this.width, this.height);
-
-    // this.loadManager = new THREE.LoadingManager();
-    // this.loader = new THREE.TextureLoader(this.loadManager);
-
-    // this.img1 = this.loader.load(img1);
-    // this.img2 = this.loader.load(img2);
-    // this.img3 = this.loader.load(img3);
-    // this.img4 = this.loader.load(img4);
-    // this.img5 = this.loader.load(img5);
-    // this.disp = this.loader.load(disp);
-    // this.white = this.loader.load(white);
-    // this.textures= [this.img1, this.img2, this.img3, this.img4, this.img5];
-
-    // this.aspect = 1080 / 1920;
-
-    // this.loadManager.onLoad = () => {
-    //   this.setting();
-    //   this.init();
-    //   this.lenis();
-    //   setTimeout(() => {
-    //     this.initiated = true;
-    //   }, 1600);
-    // };
-    this.init();
-    for (let i = 0; i < this.menuTrigger.length; i++) {
-      this.menuTrigger[i].addEventListener('click', this.triggerMenu.bind(this));
-    }
-    // for (let i = 0; i < this.scrollTrigger.length; i++) {
-    //   this.scrollTrigger[i].addEventListener('click', this.toScroll.bind(this));
-    // }
-    window.onresize = () => {
       this.resizeEvent();
-    }
-  }
 
-  checkBreakPoint() {
-    if (window.innerWidth < 750) {
-      this.sp = true;
-    }
-  }
-  
-  triggerMenu(e) {
-    if (this.menu.classList.contains('active')) {
-      this.menu.classList.remove('active');
-      this.logo.classList.remove('active');
-      this.headerEllipse.classList.remove('open');
       for (let i = 0; i < this.menuTrigger.length; i++) {
-        this.menuTrigger[i].classList.remove('active');
+        this.menuTrigger[i].addEventListener('click', this.triggerMenu.bind(this));
       }
-    } else {
-      this.menu.classList.add('active');
-      this.logo.classList.add('active');
-      this.headerEllipse.classList.add('open');
-      for (let i = 0; i < this.menuTrigger.length; i++) {
-        this.menuTrigger[i].classList.add('active');
-      }
+
+      if (!this.scrollTrigger) return;
+        for (let i = 0; i < this.scrollTrigger.length; i++) {
+          this.scrollTrigger[i].addEventListener('click', this.toScroll);
+        }
     }
   }
 
-  toScroll(e) {
-    const elm = e.currentTarget;
-    const target = document.getElementById(elm.getAttribute('data-target'));
-    let elemRect = target.getBoundingClientRect();
-    let scrollY = window.scrollY || window.pageYOffset;
-    let top = elemRect.top + scrollY;
+  isIE() {
+    let ua = navigator.userAgent;
+    /* MSIE used to detect old browsers and Trident used to newer ones*/
+    this.is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
 
-    if (elm.getAttribute('data-target') === 'theme' && window.innerWidth < 750) {
-      this.dir = 'enter';
-      this.scrollDown();
-      top = 1;
-    }
-
-    this.headerEllipse.classList.remove('open');
-    this.menuTrigger[0].classList.remove('active');
-    this.menu.classList.remove('active');
-    this.logo.classList.remove('active');
-
-    Scroll.to(top, 2);
-  }
-
-  animation() {
-    const logo1 = document.querySelector('.logo1');
-    const logo2 = document.querySelector('.logo2');
-    const logo3 = document.querySelector('.logo3');
-    const logo4 = document.querySelector('.logo4');
-
-    console.log(33)
-
-    new Vivus('logo1', {duration: 150}, () => {
-      // logo1.classList.add('fill');
-    });
-    logo1.classList.add('active');
-    setTimeout(() => {
-      logo1.classList.add('fill');
-    }, 500);
-
-    setTimeout(() => {
-      new Vivus('logo2', {duration: 150}, () => {
-        // logo2.classList.add('fill');
-      });
-      logo2.classList.add('active');
-      setTimeout(() => {
-        logo2.classList.add('fill');
-      }, 1000);
-    }, 500);
-
-    setTimeout(() => {
-      new Vivus('logo3', {duration: 150}, () => {
-        // logo3.classList.add('fill');
-      });
-      logo3.classList.add('active');
-      setTimeout(() => {
-        logo3.classList.add('fill');
-      }, 1000);
-    }, 1000);
-
-    setTimeout(() => {
-      new Vivus('logo4', {duration: 150}, () => {
-        // logo4.classList.add('fill');
-      });
-      logo4.classList.add('active');
-      setTimeout(() => {
-        logo4.classList.add('fill');
-      }, 1000);
-    }, 1500);
-  }
-
-  init() {
-    this.resizeEvent();
-    window.scrollTo(0, 0);
-    this.animation();
-    document.body.classList.add('loaded');
-    // this.interval = setInterval(this.topGif.bind(this), 5000);
-  }
-
-  topGif() {
-    if (!document.body.classList.contains('original')) {
-      document.body.classList.add('original');
-    }
-    for (let i = 0; i < this.keyvImg.length; i++) {
-      this.keyvImg[i].classList.remove('active');
-    }
-    this.keyvImg[this.index].classList.add('active');
-    this.tween = gsap.to(this.material.uniforms.uProgress, {
-			value: 1.0,
-			ease: [0.32, 0, 0.67, 0],
-			duration: 1.4,
-			onComplete: () => {
-				this.index = this.index + 1;
-				if (this.index > this.keyvImg.length - 1) {
-					this.index = 0;
-				}
-				this.next = this.next + 1;
-				if (this.next > this.keyvImg.length - 1) {
-					this.next = 0;
-				}
-				this.material.uniforms.uCurrentImage.value = this.textures[this.index];
-				this.material.uniforms.uNextImage.value = this.textures[this.next];
-				this.material.uniforms.uProgress.value = 0.0;
-			}
-	  })
-  }
-  lerp(a, b, t) {
-    if(b == a) return a;
-    return a + t * (b - a);
-  }
-  lerpInterval() {
-    this.lerpAmount = this.lerpAmount+0.05;
-    let lerp = this.lerp(this.lerpAmount, 1, 0.1);
-
-    if (this.dir === 'enter') {
-      gsap.to(this.material.uniforms.uAnimation, {
-        value: lerp,
-        duration: 0.05,
-        ease: "expo.in",
-      });
-      gsap.to('.topdisappear', {
-        alpha: `${1 - lerp}`,
-        ease: "power1.out",
-      });
-      gsap.to('.topdisappearfirst', {
-        alpha: `${1 - lerp}`,
-        ease: "power1.out",
-      });
-      if (this.lerpAmount > .99) {
-        clearInterval(this.lerp_);
-        this.moving = false;
-        // console.log(this.theme.offsetTop)
-        // window.scrollTo(this.theme.offsetTop+100, 0);
-        this.header.classList.add('revert');
-        this.cta.classList.add('active');
-        for (let i = 0; i < this.fixed.length; i++) {
-          this.fixed[i].classList.add('active');
-        }
-        this.ctaAbsolute.classList.add('disable');
-        this.top.setAttribute('style', 'z-index: 0;');
-        this.ellipse.classList.remove('pause');
-        this.lerpAmount = 1;
-      }
-    } else if (this.dir === 'enterback') {
-      this.top.setAttribute('style', 'z-index: 10;');
-      gsap.to(this.material.uniforms.uAnimation, {
-        value: `${1 - lerp}`,
-        duration: 0.05,
-        ease: "expo.in",
-      });
-      if (this.lerpAmount > .99) {
-        clearInterval(this.lerp_);
-        this.moving = false;
-      } else {
-        gsap.to('.topdisappear', {
-          alpha: `${lerp}`,
-          ease: "power1.out",
-        });
-        console.log(lerp)
-        gsap.to('.topdisappearfirst', {
-          alpha: `${lerp}`,
-          ease: "power1.out",
-        });
+    if (this.is_ie) {
+      document.body.classList.add('ie');
+      // document.getElementsByTagName('html')[0].classList.add('html-ie')
+      if (!ua.match(/Win(dows )?NT 10\.0/)) {
+        document.body.classList.add('under10');
       }
     }
-  }
-  scrollDown() {
-    if (!this.moving) {
-      // console.log('scrolldown');
-      let timeout = 1425;
-      this.moving = true;
-      clearInterval(this.lerp_);
-      if (this.initiated) {
-        this.ellipse.classList.add('pause');
-        if (this.sp) {
-          timeout = 925;
-        }
-      }
-      setTimeout(() => {
-        clearInterval(this.lerp_);
-        this.dir = 'enter';
-        this.lerpAmount = 0;
-        this.lerp_ = setInterval(this.lerpInterval.bind(this), 10);
-      }, timeout);
-    }
-  }
-  scrollUp() {
-    // console.log('scrollup');
-    this.moving = true;
-    clearInterval(this.lerp_);
-    this.dir = 'enterback';
-    this.lerpAmount = 0;
-    this.header.classList.remove('revert');
-    this.cta.classList.remove('active');
-    for (let i = 0; i < this.fixed.length; i++) {
-      this.fixed[i].classList.remove('active');
-    }
-    this.ctaAbsolute.classList.remove('disable');
-    setTimeout(() => {
-      this.lerp_ = setInterval(this.lerpInterval.bind(this), 10);
-    }, 250);
-  }
-  animationScroll() {
-    let show = document.getElementsByClassName('show');
-    let bar = document.getElementsByClassName('center-bar');
-    let dot = document.getElementsByClassName('center-dot');
-    let splitShow = document.getElementsByClassName('splitshow');
-    let disappear = document.getElementsByClassName('disappear');
-    let scaleUp = document.getElementsByClassName('scaleup');
-    let parallax = document.getElementsByClassName('parallax');
-    let zoom = document.getElementsByClassName('zoom');
-    let targetImg = document.getElementsByClassName('target-img');
-    let splitting = document.getElementsByClassName('titleanim');
-    let top = document.getElementById("top");
-    let scheduleWrapper = document.getElementById("schedule-wrapper");
-    let center = document.getElementById("center");
-    let entry = document.getElementById('entry');
-
-    gsap.to(center, {
-      height: '99%',
-      // ease: "power4.inOut",
-      scrollTrigger: {
-                    // eventsTarget: this.scroller,
-            // content: '#main',
-        trigger: scheduleWrapper,
-        start: `top center`,
-        end: `bottom top`,
-        scrub: .5,
-        invalidateOnRefresh: true,
-      }
-    });
-    if (window.innerWidth > 750) {
-      for (let i = 0; i < disappear.length; i++) {
-        let elm = disappear[i];
-        gsap.to(elm, {
-          alpha: 0,
-          ease: "power1.out",
-          scrollTrigger: {
-            trigger: elm,
-            start: `top top`,
-            end: `bottom center`,
-            scrub: 1,
-          invalidateOnRefresh: true,
-          }
-        });
-      }
-    } else {
-      const wrapper = document.querySelector(".parent-wrapper");
-      const slides = gsap.utils.toArray(".slide");
-      const firstTheme = gsap.utils.toArray(".first-section");
-      const theme = gsap.utils.toArray(".theme");
-          
-      // コンテナの幅を取得
-      const wrapperWidth = wrapper.offsetWidth;
-          
-      // 横スクロールアニメーションの設定
-      gsap.to(slides, {
-        xPercent: `${-100 * (slides.length - 1)}`, // -X軸方向に移動
-        ease: "none", // アニメーションのイージング(noneは定速)
-        // ease: "power4.inOut",
-        scrollTrigger: {
-                      // eventsTarget: this.scroller,
-            // content: '#main',
-          trigger: wrapper, // アニメーション開始のトリガー要素
-          pin: true, // 要素を固定
-          scrub: 1, // スクロール量に合わせてアニメーション
-          start: `center center-=${wrapper.clientHeight/2}`, // アニメーションが始まる位置
-          // start: "center center", // アニメーションが始まる位置
-          end: `+=${wrapperWidth}`, // アニメーションが終わる位置
-          anticipatePin: 1, // ピン留めアニメーションをスムーズに開始
-          invalidateOnRefresh: true, // ページの再読み込み時(リサイズ時)に値を再計算する
-        },
-      });
-      gsap.to(theme, {
-        alpha: `1`,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: theme,
-          start: `top bottom-=${window.innerHeight/2}`,
-          end: `top bottom-=${window.innerHeight/1.5}`,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onEnter: () => {
-          }
-        }
-      });
-      gsap.to(firstTheme, {
-        y: `-40%`,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: theme,
-          start: `top bottom+=${window.innerHeight/1.5}`,
-          end: `top bottom`,
-          scrub: 1,
-          onEnter: () => {
-            // let shows = entry.getElementsByClassName('show');
-            // console.log(shows)
-            // for (let i = 0; i < shows.length; i++) {
-            //   shows[i].classList.add('active');
-            // }
-          }
-          // invalidateOnRefresh: true,
-        }
-      });
-      gsap.to(firstTheme, {
-        // y: `10%`,
-        scale: .95,
-        alpha: 0, 
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: theme,
-          start: `top bottom`,
-          end: `top bottom-=${window.innerHeight/2}`,
-          scrub: 1,
-          onEnter: () => {
-            // let shows = entry.getElementsByClassName('show');
-            // console.log(shows)
-            // for (let i = 0; i < shows.length; i++) {
-            //   shows[i].classList.add('active');
-            // }
-          }
-          // invalidateOnRefresh: true,
-        }
-      });
-    }
-
-    for (let i = 0; i < targetImg.length; i++) {
-      let target = targetImg[i];
-      let path1 = 'polygon(0px 0px, 100% 0px, 100% 0%, 0% 0%)';
-      let path2 = "polygon(0% 0px, 100% 0px, 100% 100%, 0% 100%)";
-
-      let clip_polygon = gsap.timeline({
-        scrollTrigger: {
-                      // eventsTarget: this.scroller,
-            // content: '#main',
-          trigger: target,
-          start: "top bottom",
-          end: "center center",
-          scrub: true,
-        }
-      });
-      clip_polygon.fromTo(
-        target,
-        {
-          clipPath: path1
-        },
-        {
-          clipPath: path2,
-          duration: 1.5
-        }
-      );
-    }
-    for (let i = 0; i < splitting.length; i++) {
-      let elm = splitting[i];
-      let char = elm.getElementsByClassName('char');
-      let start = `center bottom+=${window.innerHeight*.2}px`;
-      for (let j = 0; j < char.length; j++) {
-        gsap.to(char, {
-          alpha: 1,
-          ease: "power4.inOut",
-          scrollTrigger: {
-            trigger: elm,
-            start: start, 
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-          stagger: {
-            from: "start", //左からアニメーション start、center、edges、random、endが指定できる
-            amount: `${j*.1}` //0.1秒ズラしてアニメーション
-          }
-        });
-      }
-    }
-    for (let i = 0; i < splitShow.length; i++) {
-      let elm = splitShow[i];
-      let start = `center bottom`;
-      if (!elm.classList.contains('fixed')) {
-        if (elm.classList.contains('first')) {
-          start = 'top bottom+=50%';
-        }
-      gsap.to(elm, {
-        ease: "power4.inOut",
-        scrollTrigger: {
-          trigger: elm,
-          start: start, 
-          scrub: true,
-          invalidateOnRefresh: true,
-          onEnter: () => {
-            elm.classList.add('active');
-          },
-        }
-      });
-      }
-    }
-    for (let i = 0; i < dot.length; i++) {
-      let elm = dot[i];
-      gsap.to(elm, {
-        ease: "power4.inOut",
-        scrollTrigger: {
-          trigger: elm,
-          start: `top center+=${window.innerHeight/4}`, 
-          scrub: true,
-          invalidateOnRefresh: true,
-          onEnter: () => {
-            elm.classList.add('active');
-          }
-        }
-      });
-    }
-    for (let i = 0; i < bar.length; i++) {
-      let elm = bar[i];
-      gsap.to(elm, {
-        ease: "power4.inOut",
-        scrollTrigger: {
-          trigger: elm,
-          start: `top center`, 
-          scrub: true,
-          invalidateOnRefresh: true,
-          onEnter: () => {
-            elm.classList.add('active');
-          }
-        }
-      });
-    }
-    for (let i = 0; i < show.length; i++) {
-      let elm = show[i];
-      let start = `center bottom`;
-      if (!elm.classList.contains('fixed')) {
-        if (elm.classList.contains('first')) {
-          start = `top bottom+=50%`;
-        }
-        if (elm.classList.contains('firstt')) {
-          start = `top bottom+=75%`;
-        }
-        gsap.to(elm, {
-          ease: "power4.inOut",
-          scrollTrigger: {
-            trigger: elm,
-            start: start, 
-            onEnter: () => {
-              elm.classList.add('active');
-            }
-          }
-        });
-      }
-    }
-    for (let i = 0; i < scaleUp.length; i++) {
-      let elm = scaleUp[i];
-      gsap.to(elm, {
-        scale: 1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: elm,
-          start: `top bottom`, 
-          end: `center center`,
-          scrub: 1,
-          invalidateOnRefresh: true
-        }
-      });
-    }
-    for (let i = 0; i < parallax.length; i++) {
-      let elm = parallax[i];
-      let amount = elm.getAttribute('data-amount');
-      gsap.to(elm, {
-        y: () => `${amount}`,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: elm,
-          start: `top bottom`, 
-          end: `bottom top`,
-          scrub: 1,
-          invalidateOnRefresh: true
-        }
-      });
-    }
-    for (let i = 0; i < zoom.length; i++) {
-      let elm = zoom[i];
-      gsap.to(elm, {
-        scale: 1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: elm,
-          start: `top bottom`, 
-          end: `bottom top`,
-          scrub: true,
-          invalidateOnRefresh: true
-        }
-      });
-    }
-    gsap.to(top, {
-      ease: "power4.inOut",
-      scrollTrigger: {
-        trigger: top,
-        start: `top top`,
-        end: `top top-=${1}px`,
-        scrub: true,
-        invalidateOnRefresh: true,
-        onEnter: () => {
-          this.scrollDown();
-        },
-        onEnterBack:() => {
-          this.scrollUp();
-        }
-      },
-    });
-    gsap.to(entry, {
-      ease: "power4.inOut",
-      scrollTrigger: {
-        trigger: entry,
-        start: `top center`,
-        end: `bottom bottom-=${this.footer.clientHeight*1.5}px`,
-        // end: `top top-=${5}px`,
-        // end: `bottom bottom-=${window.innerHeight*.5}`,
-        scrub: true,
-          invalidateOnRefresh: true,
-        onEnter: () => {
-          this.cta.classList.remove('active');
-        },
-        onLeave: () => {
-          this.cta.classList.add('active');
-        },
-        onEnterBack: () => {
-          this.cta.classList.remove('active');
-        },
-        onLeaveBack: () => {
-          this.cta.classList.add('active');
-        },
-      },
-    });
-  }
-
-  setting() {
-    this.webgl.appendChild(this.renderer.domElement);
-    this.camera = new THREE.PerspectiveCamera(
-      (180 * (2 * Math.atan(this.height / 2 / 800))) / Math.PI,
-      this.width / this.height,
-      1,
-      100000
-    );
-    this.camera.position.set(0, 0, 800);
-    this.setMesh();
   }
 
   resizeEvent() {
     let vh = window.innerHeight * 0.01;
+    this.pageSize = _.getPageSize();
     // カスタム変数--vhの値をドキュメントのルートに設定
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    ScrollTrigger.refresh();
-    // this.checkBreakPoint();
-  }
-
-  setMesh() {
-    this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-    this.uniforms = {
-        resolution: {
-          type: 'v2',
-          value: new THREE.Vector2(window.innerWidth, window.innerHeight),
-        },
-        imageResolution: {
-          type: 'v2',
-          value: new THREE.Vector2(2880, 1800),
-        },
-        uAnimation: {
-          value: 0,
-        },
-        uProgress: { 
-          value: 0.0
-        },
-        uCurrentImage: {
-          value: this.img1,
-        },
-        uNextImage: {
-          value: this.img2,
-        },
-        uDisp: {
-          value: this.disp,
-        },
-        uWhite: {
-          value: this.white,
-        },
-    }
-    this.material = new THREE.ShaderMaterial({
-      vertexShader: vert,
-      fragmentShader: frag,
-      uniforms: this.uniforms,
-    });
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.scene.add(this.mesh);
-    this.mesh.scale.x = this.width;
-    this.mesh.scale.y = this.height;
-    this.onRaf();
-  }
-  onRaf() {
-    let frame = 0;
-    const tick = () => {
-      requestAnimationFrame(tick);
-      frame++;
-      // フレーム数が２で割り切れなければ描画しない
-      if (frame % 2 == 0) {
-        return;
+    // this.menu.style.setProperty("--vh", `${vh}px`);
+    if (this.pageSize.ww < 750) {
+      let top = window.innerHeight - this.header.clientHeight;
+      this.animRatio = 1;
+      // this.subMenu.setAttribute('style', `height: ${top}px; top: ${this.header.clientHeight}px`);
+      if (this.pastww > 750) {
+        // this.initSwiper();
       }
-      // console.log(frame)
-      // 描画
-      this.renderer.render(this.scene, this.camera);
-    }
-    tick();
-  }
-  lenis() {
-    let lerp = .8;
-    let duration = 1.1;
-    if (this.sp) {
-      lerp = .3;
-      duration = 2;
-      this.lenisInstance = new Lenis({
-        lerp: lerp,
-        duration: duration,
-        smooth: true,
-        smoothTouch: true,
-      })
     } else {
-      if (this.browserName === 'Safari' && parseFloat(this.browserVersion) < 14) {
+      // this.subMenu.setAttribute('style', ``);
+      this.animRatio = .8;
+    }
+    this.pastww = this.pageSize.ww;
+  }
 
-      } else {
-        this.lenisInstance = new Lenis({
-          lerp: lerp,
-          duration: duration
-        })
+  checkScrollPosition() {
+    if (window.location.hash) {
+      let target = document.getElementById(window.location.hash.split('#')[1]);
+      if (target) {
+        let header = '';
+        if (document.getElementById('header')) {
+          header = document.getElementById('header');
+        } else if (document.getElementById('header-new')) {
+          header = document.getElementById('header-new');
+        }
+        let scrollY = window.scrollY || window.pageYOffset;
+        let top = target.getBoundingClientRect().top + scrollY;
+
+        top -= header.clientHeight;
+
+        setTimeout(() => {
+          Scroll.to(top, 0);
+        }, 10);
       }
     }
+  }
 
-    if (this.lenisInstance) {
-      this.lenisInstance.on('scroll', () => {
-        ScrollTrigger.update
-      })
+  toScroll() {
+    const target = document.getElementById(this.getAttribute('data-target'));
+    const menu = document.getElementById('menu');
+    const menuTrigger = document.getElementsByClassName('menu-trigger');
+    const headerFixed = document.getElementById('header-fixed');
 
-      gsap.ticker.add((time)=>{
-        this.lenisInstance.raf(time * 1000)
-      })
+    let elemRect = target.getBoundingClientRect();
+    let scrollY = window.scrollY || window.pageYOffset;
+    let top = elemRect.top + scrollY;
+
+    // top -= headerFixed.clientHeight;
+
+    for (let i = 0; i < menuTrigger.length; i++) {
+      menuTrigger[i].classList.remove('active');
+    }
+
+    menu.classList.remove('active');
+
+    Scroll.to(top, 2);
+  }
+
+  listen(param) {
+    switch (param) {
+      case Event.READY:
+        this.ready();
+        break;
+        case Event.SCROLL:
+          window.onscroll = () => {
+            this.scrollAnimation();
+          }
+          break;
+      case Event.LOAD:
+        break;
+    }
+  }
+
+  ready() {
+    window.scrollTo(0, 0);
+    this.root.classList.add('loaded');
+    this.scrollAnimation();
+    this.checkScrollPosition();
+  }
+
+  scrollAnimation() {
+    this.scrollY = this.scrollingElement.scrollTop;
+    for (let i = 0; i < this.anim.length; i++) {
+      const anim = this.anim[i];
+      const offset = anim.getAttribute('data-offset');
+      let elemRect = anim.getBoundingClientRect();
+      let rect = {
+        top: elemRect.top + window.pageYOffset,
+        bottom: elemRect.bottom + window.pageYOffset,
+        left: elemRect.left + window.pageXOffset
+      };
+
+      if (offset != null) {
+        rect.top = rect.top + parseInt(offset);
+      }
+      if (this.scrollY > (rect.top - this.pageSize.wh * this.animRatio) || window.scrollY > (rect.top - this.pageSize.wh * this.animRatio)) {
+        anim.classList.remove('reset');
+        anim.classList.add('active');
+      }
     }
   }
 }
 
-window.addEventListener("load", () => {
-  const webgl = new main(document.querySelector("#canvas"));
-});
+new Main();
