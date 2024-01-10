@@ -1583,6 +1583,21 @@ var Main = /*#__PURE__*/function () {
     };
   }
   _createClass(Main, [{
+    key: "triggerMenu",
+    value: function triggerMenu(e) {
+      if (this.menu.classList.contains('active')) {
+        this.menu.classList.remove('active');
+        for (var i = 0; i < this.menuTrigger.length; i++) {
+          this.menuTrigger[i].classList.remove('active');
+        }
+      } else {
+        this.menu.classList.add('active');
+        for (var _i2 = 0; _i2 < this.menuTrigger.length; _i2++) {
+          this.menuTrigger[_i2].classList.add('active');
+        }
+      }
+    }
+  }, {
     key: "isIE",
     value: function isIE() {
       var ua = navigator.userAgent;

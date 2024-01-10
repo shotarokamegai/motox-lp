@@ -1,10 +1,10 @@
 <header id="header" class="section">
-  <div class="section__inner flex align-center space-between">
+  <div class="section__inner flex flex-sp align-center space-between">
     <h1 class="flex flex-sp">
-        <img src="./assets/img/logo.svg" alt="Aging Care Wine Certified" />
-        <img src="./assets/img/ja.svg" alt="エイジングケアワイン.jp" />
+        <img src="<%- path %>/img/logo.svg" alt="Aging Care Wine Certified" />
+        <img src="<%- path %>/img/ja.svg" alt="エイジングケアワイン.jp" />
     </h1>
-    <nav>
+    <nav id="menu">
       <ul class="flex">
         <li>
           <a href="/about/">
@@ -18,5 +18,10 @@
         </li>
       </ul>
     </nav>
+    <div class="menu-trigger sp">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </header>

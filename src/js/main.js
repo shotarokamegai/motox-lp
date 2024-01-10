@@ -63,6 +63,20 @@ class Main {
     }
   }
 
+  triggerMenu(e) {
+    if (this.menu.classList.contains('active')) {
+      this.menu.classList.remove('active');
+      for (let i = 0; i < this.menuTrigger.length; i++) {
+        this.menuTrigger[i].classList.remove('active');
+      }
+    } else {
+      this.menu.classList.add('active');
+      for (let i = 0; i < this.menuTrigger.length; i++) {
+        this.menuTrigger[i].classList.add('active');
+      }
+    }
+  }
+
   isIE() {
     let ua = navigator.userAgent;
     /* MSIE used to detect old browsers and Trident used to newer ones*/

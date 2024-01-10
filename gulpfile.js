@@ -98,4 +98,13 @@ gulp.task('ejs', (done) => {
   done();
 });
 
+gulp.task('ejs', (done) => {
+  gulp.src('./src/ejs/_about.ejs')
+    .pipe(ejs())
+    .pipe(rename('index.html'))
+    .pipe(connect.reload())
+    .pipe(gulp.dest(`./about`));
+  done();
+});
+
 gulp.task('default', gulp.series(gulp.parallel('connect', 'ejs', 'sass', 'js', 'watch')));
