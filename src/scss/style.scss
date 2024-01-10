@@ -31,7 +31,7 @@ html.lenis {
 }
 body {
   font-feature-settings: "palt";
-  font-family: $Ryo;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
   color: $primary;
   // opacity: 0;
   background-color: $body;
@@ -546,6 +546,9 @@ body {
               }
               .btn {
                 margin-top: rem(40);
+                &.mt {
+                  margin-top: rem(120);
+                }
               }
             }
             .right {
