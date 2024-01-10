@@ -877,6 +877,12 @@ body .anim.normal.active {
   #container {
     padding-top: 16rem;
   }
+  #container .hover {
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #container .hover:hover {
+    opacity: 0.7;
+  }
   #container #header {
     position: fixed;
     top: 0;
