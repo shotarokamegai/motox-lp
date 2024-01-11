@@ -121,6 +121,16 @@ body {
           }
         }
         h1 {
+          position: relative;
+          p {
+            position: absolute;
+            bottom: vw(3);
+            left: vw(64.53);
+            @include fontvw(10);
+            // @include tracking(60);
+            white-space: nowrap;
+            color: $black;
+          }
           img {
             &:nth-child(1) {
               margin-right: vw(9);
@@ -276,6 +286,10 @@ body {
         margin-bottom: vw(20);
         @include fontvw(18);
         line-height: (30 / 18);
+        .small {
+          display: block;
+          @include fontvw(14);
+        }
       }
       p {
         @include fontvw(14);
@@ -356,6 +370,16 @@ body {
         height: 100%;
         border-bottom: rem(1) solid $primary;
         h1 {
+          position: relative;
+          p {
+            position: absolute;
+            bottom: rem(10);
+            left: rem(121.04);
+            @include fontsize(12);
+            // @include tracking(60);
+            white-space: nowrap;
+            color: $black;
+          }
           img {
             &:nth-child(1) {
               margin-right: rem(15);
@@ -510,6 +534,11 @@ body {
         margin-bottom: rem(40);
         @include fontsize(20);
         line-height: (34 / 20);
+        .small {
+          margin-left: rem(30);
+          display: inline-block;
+          @include fontsize(16);
+        }
       }
       p {
         @include fontsize(16);
