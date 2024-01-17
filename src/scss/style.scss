@@ -309,6 +309,10 @@ body {
         box-sizing: border-box;
         transform: translate3d(-50%, rem(15), 0);
         background-color: #EBEBEB;
+        .logo {
+          margin: vw(20) auto 0 0;
+          width: vw(100);
+        }
         &.active {
           transform: translate3d(-50%, 0, 0);
         }
@@ -553,6 +557,10 @@ body {
         padding: rem(45) rem(40);
         margin-top: rem(30);
         background-color: #EBEBEB;
+        .logo {
+          margin: rem(30) auto 0 0;
+          width: rem(150);
+        }
       }
     }
     section {
