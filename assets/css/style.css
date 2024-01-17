@@ -1092,9 +1092,14 @@ body .anim.normal.active {
     margin-top: 3rem;
     background-color: #EBEBEB;
   }
-  #container main#about .box .logo {
-    margin: 3rem auto 0 0;
-    width: 15rem;
+  #container main#about .box.flex {
+    display: flex;
+  }
+  #container main#about .box.flex p {
+    width: calc(100% - 25rem);
+  }
+  #container main#about .box.flex .logo {
+    width: 20rem;
   }
   #container main section {
     position: relative;

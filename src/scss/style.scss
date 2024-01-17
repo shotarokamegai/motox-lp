@@ -557,9 +557,14 @@ body {
         padding: rem(45) rem(40);
         margin-top: rem(30);
         background-color: #EBEBEB;
-        .logo {
-          margin: rem(30) auto 0 0;
-          width: rem(150);
+        &.flex {
+          display: flex;
+          p {
+            width: calc( 100% - rem(250));
+          }
+          .logo {
+            width: rem(200);
+          }
         }
       }
     }
