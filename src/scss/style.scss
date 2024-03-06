@@ -602,6 +602,7 @@ body {
             margin-top: rem(45);
           }
           &.flex {
+            display: flex;
             .img {
               margin-right: rem(40);
               &:last-child {
