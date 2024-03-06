@@ -100,6 +100,11 @@ gulp.task('ejs', (done) => {
     .pipe(rename('index.html'))
     .pipe(connect.reload())
     .pipe(gulp.dest(`./about`));
+  gulp.src('./src/ejs/_touka.ejs')
+    .pipe(ejs())
+    .pipe(rename('index.html'))
+    .pipe(connect.reload())
+    .pipe(gulp.dest(`./touka`));
   done();
 });
 

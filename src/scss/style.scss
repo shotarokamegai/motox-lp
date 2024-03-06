@@ -45,6 +45,9 @@ body {
   &.visited {
     opacity: 1;
   }
+  .wine {
+    color: $wine;
+  }
   .hidden {
     visibility: hidden;
   }
@@ -294,6 +297,11 @@ body {
       p {
         @include fontvw(14);
         line-height: (24 / 14);
+        .title {
+          margin-bottom: vw(20);
+          display: block;
+          color: $wine;
+        }
         &.note {
           margin-top: vw(25);
           @include fontvw(12);
@@ -312,6 +320,20 @@ body {
         .logo {
           margin: vw(20) auto 0;
           width: vw(150);
+        }
+        .img-wrapper {
+          margin-bottom: vw(40);
+          &.mt {
+            margin-top: vw(20);
+          }
+          &.flex {
+            .img {
+              margin-bottom: vw(20);
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
         }
         &.active {
           transform: translate3d(-50%, 0, 0);
@@ -550,6 +572,11 @@ body {
       p {
         @include fontsize(16);
         line-height: (27 / 16);
+        .title {
+          margin-bottom: rem(30);
+          display: block;
+          color: $wine;
+        }
         &.note {
           margin-top: rem(30);
           @include fontsize(12);
@@ -568,6 +595,23 @@ body {
           .logo {
             width: rem(200);
           }
+        }
+        .img-wrapper {
+          margin-bottom: rem(40);
+          &.mt {
+            margin-top: rem(45);
+          }
+          &.flex {
+            .img {
+              margin-right: rem(40);
+              &:last-child {
+                margin-right: 0;
+              }
+            }
+          }
+        }
+        .img {
+          width: rem(480);
         }
       }
     }
