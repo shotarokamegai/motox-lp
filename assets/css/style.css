@@ -1135,6 +1135,9 @@ body .anim.normal.active {
   #container main#about .box .img-wrapper.mt {
     margin-top: 4.5rem;
   }
+  #container main#about .box .img-wrapper.flex {
+    display: flex;
+  }
   #container main#about .box .img-wrapper.flex .img {
     margin-right: 4rem;
   }
